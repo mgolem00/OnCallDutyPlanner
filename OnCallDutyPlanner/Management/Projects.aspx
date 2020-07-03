@@ -11,13 +11,13 @@
 <body>
     <form id="form1" runat="server">
         <div class="topnav">
-            <a id="logo" href="#">On-Call Duty Planner</a>
+            <a id="logo">On-Call Duty Planner</a>
             <a id="welcome"><asp:Label ID="Welcome" runat="server"></asp:Label></a>
 
             <div class="topnav-right">
-                <a href="/Scheduler.aspx">Scheduler</a>
-                <a href="Projects.aspx" class="active">Projects</a>
+                <a href="/Scheduler.aspx">Time Planner</a>
                 <a href="AccDistr.aspx">Account Distribution</a>
+                <a href="Projects.aspx" class="active">Projects</a>
                 <a href="AccDistrConfig.aspx">Account Distribution Configuration</a>
                 <a href="SLATeams.aspx">SLA Teams</a>
                 <a href="Users.aspx">Users</a>

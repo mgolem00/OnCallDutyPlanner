@@ -15,9 +15,9 @@
             <a id="welcome"><asp:Label ID="Welcome" runat="server"></asp:Label></a>
 
             <div class="topnav-right">
-                <a href="/Scheduler.aspx">Scheduler</a>
-                <a href="Projects.aspx">Projects</a>
+                <a href="/Scheduler.aspx">Time Planner</a>
                 <a href="AccDistr.aspx">Account Distribution</a>
+                <a href="Projects.aspx">Projects</a>
                 <a href="AccDistrConfig.aspx">Account Distribution Configuration</a>
                 <a href="SLATeams.aspx" class="active">SLA Teams</a>
                 <a href="Users.aspx">Users</a>
