@@ -11,20 +11,26 @@
 <body>
     <form id="form1" runat="server">
         <div class="topnav">
-            <a id="logo" href="#">On-Call Duty Planner</a>
+            <a id="logo">On-Call Duty Planner</a>
             <a id="welcome"><asp:Label ID="Welcome" runat="server"></asp:Label></a>
 
             <div class="topnav-right">
-                <a href="/Scheduler.aspx">Scheduler</a>
-                <a href="Projects.aspx">Projects</a>
-                <a href="AccDistr.aspx" class="active">Account Distribution</a>
-                <a href="AccDistrConfig.aspx">Account Distribution Configuration</a>
-                <a href="SLATeams.aspx">SLA Teams</a>
-                <a href="Users.aspx">Users</a>
+                <a href="/Scheduler.aspx">Time Planner</a>
+                <a href="AccDistr.aspx" class="active" id="AccDistrLink" runat="server">Account Distribution</a>
+                <a href="Projects.aspx" id="ProjectsLink" runat="server">Projects</a>
+                <a href="AccDistrConfig.aspx" id="AccDistrConfigLink" runat="server">Account Distribution Configuration</a>
+                <a href="SLATeams.aspx" id="SLATeamsLink" runat="server">SLA Teams</a>
+                <a href="Users.aspx" id="UsersLink" runat="server">Users</a>
                 <a id="logout" runat="server" onserverclick="SignOut">Log out</a>
             </div>
         </div>
         <div class="main">
+            <asp:Panel ID="ChoosePanel" runat="server">
+                Choose a Month:<asp:DropDownList ID="DropDownMonth" runat="server"></asp:DropDownList>
+                Choose a Year:<asp:DropDownList ID="DropDownYear" runat="server"></asp:DropDownList>
+                <asp:Button id="SearchButton" Text="Select" OnClick="SelectBtnClick" runat="server"/>
+            </asp:Panel>
+            <br />
             <asp:Panel runat="server" ID="GridViewsPanel"></asp:Panel>
         </div>
     </form>
