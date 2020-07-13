@@ -343,7 +343,15 @@ namespace OnCallDutyPlanner.Management
         {
             if (ChooseTeamDDL.SelectedValue != "---")
             {
-                string workPeriod = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Month + 1).ToString() + "-1";
+                string workPeriod = "";
+                if (DateTime.Now.Month == 12)
+                {
+                    workPeriod = (DateTime.Now.Year + 1).ToString() + "-1-1";
+                }
+                else
+                {
+                    workPeriod = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Month + 1).ToString() + "-1";
+                }
                 AccountDistributionStartDateLabel.Text = "This Account Distribution Configuration will apply on " + workPeriod;
                 AccountDistributionStartDateLabel.Visible = true;
 
@@ -586,7 +594,16 @@ namespace OnCallDutyPlanner.Management
                     string teamName = ChooseTeamDDL.SelectedValue;
                     int teamID = GetTeamID(teamName);
                     string dateFinished = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month).ToString();
-                    string workPeriod = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Month + 1).ToString() + "-1";
+                    string workPeriod = "";
+                    if (DateTime.Now.Month == 12)
+                    {
+                        workPeriod = (DateTime.Now.Year + 1).ToString() + "-1-1";
+                    }
+                    else
+                    {
+                        workPeriod = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Month + 1).ToString() + "-1";
+                    }
+                    
                     FinishOldAccountDistribution(teamID, dateFinished);
                     CreateAccountDistribution(teamID, workPeriod);
 
