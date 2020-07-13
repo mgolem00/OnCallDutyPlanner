@@ -11,7 +11,7 @@
 <body>
     <form id="form1" runat="server">
         <div class="topnav">
-            <a id="logo" href="#">On-Call Duty Planner</a>
+            <a id="logo">On-Call Duty Planner</a>
         </div>
     <div class="main">
         <div>

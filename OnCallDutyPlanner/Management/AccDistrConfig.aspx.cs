@@ -550,7 +550,7 @@ namespace OnCallDutyPlanner.Management
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "UPDATE AccountDistribution SET DateFinished = @dateFinished WHERE SLATeamID = @teamID;";
+                var queryString = "UPDATE AccountDistribution SET DateFinished = @dateFinished WHERE SLATeamID = @teamID AND DateFinished IS NULL;";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@teamID", teamID);
                 command.Parameters.AddWithValue("@dateFinished", dateFinished);

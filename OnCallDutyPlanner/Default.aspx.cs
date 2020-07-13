@@ -45,8 +45,7 @@ namespace OnCallDutyPlanner
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    //Response.Redirect("~/Scheduler.aspx");
-                    Response.Redirect("~/Management/Users.aspx");
+                    Response.Redirect("~/Scheduler.aspx");
                     LoginStatus.Visible = true;
                     LogoutButton.Visible = true;
                 }
@@ -73,8 +72,7 @@ namespace OnCallDutyPlanner
                     var userIdentity = userManager.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
 
                     authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, userIdentity);
-                    //Response.Redirect("~/Scheduler.aspx");
-                    Response.Redirect("~/Management/Users.aspx");
+                    Response.Redirect("~/Scheduler.aspx");
                 }
                 else
                 {
