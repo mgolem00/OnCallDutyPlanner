@@ -24,15 +24,6 @@ namespace OnCallDutyPlanner
         protected global::System.Web.UI.WebControls.Label Welcome;
 
         /// <summary>
-        /// ProjectsLink control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor ProjectsLink;
-
-        /// <summary>
         /// AccDistrLink control.
         /// </summary>
         /// <remarks>
@@ -40,6 +31,15 @@ namespace OnCallDutyPlanner
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlAnchor AccDistrLink;
+
+        /// <summary>
+        /// ProjectsLink control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor ProjectsLink;
 
         /// <summary>
         /// AccDistrConfigLink control.
@@ -112,6 +112,15 @@ namespace OnCallDutyPlanner
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button SearchButton;
+
+        /// <summary>
+        /// GridViewPanelWarningLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label GridViewPanelWarningLabel;
 
         /// <summary>
         /// GridViewsPanel control.

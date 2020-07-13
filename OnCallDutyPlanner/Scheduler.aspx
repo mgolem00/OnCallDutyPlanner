@@ -11,13 +11,13 @@
 <body>
     <form runat="server">
         <div class="topnav">
-            <a id="logo" href="#">On-Call Duty Planner</a>
+            <a id="logo">On-Call Duty Planner</a>
             <a id="welcome"><asp:Label ID="Welcome" runat="server"></asp:Label></a>
 
             <div class="topnav-right">
-                <a href="Scheduler.aspx" class="active" runat="server">Scheduler</a>
-                <a href="/Management/Projects.aspx" id="ProjectsLink" runat="server">Projects</a>
+                <a href="Scheduler.aspx" class="active" runat="server">Time Planner</a>
                 <a href="/Management/AccDistr.aspx" id="AccDistrLink" runat="server">Account Distribution</a>
+                <a href="/Management/Projects.aspx" id="ProjectsLink" runat="server">Projects</a>
                 <a href="/Management/AccDistrConfig.aspx" id="AccDistrConfigLink" runat="server">Account Distribution Configuration</a>
                 <a href="/Management/SLATeams.aspx" id="SLATeamsLink" runat="server">SLA Teams</a>
                 <a href="/Management/Users.aspx" id="UsersLink" runat="server">Users</a>
@@ -32,6 +32,7 @@
                 <asp:Button id="SearchButton" Text="Select" OnClick="SelectBtnClick" runat="server"/>
             </asp:Panel>
             <br />
+            <asp:Label runat="server" ID="GridViewPanelWarningLabel" Visible ="false"></asp:Label>
             <asp:Panel ID="GridViewsPanel" runat="server"></asp:Panel>
         </div>
     </form>
