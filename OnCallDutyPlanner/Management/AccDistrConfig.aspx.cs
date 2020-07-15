@@ -580,50 +580,107 @@ namespace OnCallDutyPlanner.Management
         protected void CreateAccDistrConfigButton_Click(object sender, EventArgs e)
         {
             DataTable dt = (DataTable)ViewState["panelContents"];
-            if(dt.Rows.Count != 0)
+
+            if (dt.Rows.Count != 0)
             {
-                int percentCheck = 0;
-
-                foreach (DataRow dr in dt.Rows)
+                bool errorsInTxtBoxDDL = false;
+                List<string> accountChoices = new List<string>();
+                for(int i = 0; i < dt.Rows.Count; i++)
                 {
-                    percentCheck += Int32.Parse(dr["Percent"].ToString());
-                }
-
-                if (percentCheck == 100)
-                {
-                    string teamName = ChooseTeamDDL.SelectedValue;
-                    int teamID = GetTeamID(teamName);
-                    string dateFinished = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month).ToString();
-                    string workPeriod = "";
-                    if (DateTime.Now.Month == 12)
+                    string txtBox = dt.Rows[i][0].ToString();
+                    int percent = -1;
+                    if (string.IsNullOrWhiteSpace(txtBox) == true)
                     {
-                        workPeriod = (DateTime.Now.Year + 1).ToString() + "-1-1";
+                        errorsInTxtBoxDDL = true;
+                        ErrorDDLTxtBoxLabel.Text = "Percentage textbox cannot be EMPTY!";
+                        SumWarningLabel.Visible = true;
+                        ErrorDDLTxtBoxLabel.Visible = true;
+                        break;
+                    }
+                    else if (int.TryParse(txtBox, out percent) == false)
+                    {
+                        errorsInTxtBoxDDL = true;
+                        ErrorDDLTxtBoxLabel.Text = "Percentage textbox MUST contain only numbers!";
+                        SumWarningLabel.Visible = true;
+                        ErrorDDLTxtBoxLabel.Visible = true;
+                        break;
                     }
                     else
                     {
-                        workPeriod = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Month + 1).ToString() + "-1";
+                        percent = Int32.Parse(txtBox);
+                        if (percent < 1 || percent > 100)
+                        {
+                            errorsInTxtBoxDDL = true;
+                            ErrorDDLTxtBoxLabel.Text = "Percentage textbox MUST be between 1 and 100!";
+                            SumWarningLabel.Visible = true;
+                            ErrorDDLTxtBoxLabel.Visible = true;
+                            break;
+                        }
                     }
-                    
-                    FinishOldAccountDistribution(teamID, dateFinished);
-                    CreateAccountDistribution(teamID, workPeriod);
+
+                    accountChoices.Add(dt.Rows[i][1].ToString());
+                }
+
+                if (accountChoices.Count != 0)
+                {
+                    if (accountChoices.Count != accountChoices.Distinct().Count())
+                    {
+                        errorsInTxtBoxDDL = true;
+                        ErrorDDLTxtBoxLabel.Text = "There can't be two same accounts in an Account Distribution!";
+                        ErrorDDLTxtBoxLabel.Visible = true;
+                    }
+                }
+
+                if(errorsInTxtBoxDDL == false)
+                {
+                    int percentCheck = 0;
 
                     foreach (DataRow dr in dt.Rows)
                     {
-                        int percent = Int32.Parse(dr["Percent"].ToString());
-                        string accountNumber = dr["Account"].ToString();
-                        int accountID = GetAccountID(accountNumber);
-                        int accDistrID = GetAccountDistributionIDByTeam(teamID);
-                        CreateAccountDistributionAccounts(percent, accDistrID, accountID);
-                        lbl_SuccessCreate.Visible = true;
+                        percentCheck += Int32.Parse(dr["Percent"].ToString());
                     }
 
-                    ModalPopupExtender1.Hide();
+                    if (percentCheck == 100)
+                    {
+                        string teamName = ChooseTeamDDL.SelectedValue;
+                        int teamID = GetTeamID(teamName);
+                        string dateFinished = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month).ToString();
+                        string workPeriod = "";
+                        if (DateTime.Now.Month == 12)
+                        {
+                            workPeriod = (DateTime.Now.Year + 1).ToString() + "-1-1";
+                        }
+                        else
+                        {
+                            workPeriod = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Month + 1).ToString() + "-1";
+                        }
+
+                        FinishOldAccountDistribution(teamID, dateFinished);
+                        CreateAccountDistribution(teamID, workPeriod);
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            int percent = Int32.Parse(dr["Percent"].ToString());
+                            string accountNumber = dr["Account"].ToString();
+                            int accountID = GetAccountID(accountNumber);
+                            int accDistrID = GetAccountDistributionIDByTeam(teamID);
+                            CreateAccountDistributionAccounts(percent, accDistrID, accountID);
+                            lbl_SuccessCreate.Visible = true;
+                        }
+
+                        ModalPopupExtender1.Hide();
+                    }
+                    else
+                    {
+                        SumWarningLabel.Visible = true;
+                        ModalPopupExtender1.Show();
+                    }
                 }
                 else
-                    SumWarningLabel.Visible = true;
+                {
+                    ModalPopupExtender1.Show();
+                }
             }
-            else
-                SumWarningLabel.Visible = true;
         }
 
         private int GetTeamID(string teamName)

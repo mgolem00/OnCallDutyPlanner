@@ -36,6 +36,7 @@
                     <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" ClientIDMode="Static" TargetControlID="modalPlaceholderButton" PopupControlID="PopupCreateAccDistrConfigPanel" CancelControlID="CancelCreateAccDistrConfigButton" OkControlID="modalPlaceholderButton" BackgroundCssClass="modalPopupBackground"></asp:ModalPopupExtender>
                     <asp:Panel runat="server" ID="PopupCreateAccDistrConfigPanel" CssClass="popup">
                         <asp:Label runat="server" ID="SumWarningLabel" Text="The sum of all percentages needs to be 100!" ForeColor="Red" Visible="false"></asp:Label><br />
+                        <asp:Label runat="server" ID="ErrorDDLTxtBoxLabel" ForeColor="Red" Visible="false"></asp:Label><br />
                         <asp:UpdatePanel runat="server" ID="AddAccDistrUpdatePanel" UpdateMode="Conditional" ChildrenAsTriggers="true">
                             <ContentTemplate>
                                 <asp:GridView ID="AccountsListGridView" runat="server" OnRowDataBound="AccountsListGridView_RowDataBound" OnRowCommand="AccountsListGridView_RowCommand" AutoGenerateColumns="false">

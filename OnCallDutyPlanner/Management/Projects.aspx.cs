@@ -309,7 +309,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                string dateFinished = DateTime.Now.ToString("yyyy-MM-dd");
+                string dateFinished = DateTime.Now.ToString("yyyy-MM") + "-" + DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month).ToString();
                 var queryString = "UPDATE Accounts SET DateFinished = @dateFinished WHERE ID = @projectID;";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@dateFinished", dateFinished);
@@ -463,7 +463,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                string dateCreated = DateTime.Now.ToString("yyyy-MM-dd");
+                string dateCreated = DateTime.Now.ToString("yyyy-MM") + "-01";
                 var queryString = "INSERT INTO Projects(Name, AccountNumber, DateCreated) VALUES (@projectName, @accountNumber, @dateCreated);";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@projectName", projectName);

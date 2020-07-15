@@ -23,10 +23,11 @@ namespace OnCallDutyPlanner
 
         class AccountDistributionHistory
         {
-            //pretvori accId i totalHours u Liste pa u GetAccountDistributionHistory napravi provjeru ako je isti userID da samo upise u listu?
-            public int accountID { get; set; }
             public string userID { get; set; }
+            public int accountDistributionID { get; set; }
+            public int accountID { get; set; }
             public int totalHours { get; set; }
+            public string workPeriod { get; set; }
         }
 
         class Account
@@ -35,7 +36,13 @@ namespace OnCallDutyPlanner
             public string accountNumber { get; set; }
             public string projectName { get; set; }
         }
-        
+
+        class AccountDistributionAccounts
+        {
+            public int accountID { get; set; }
+            public int percentage { get; set; }
+        }
+
         private List<AccountDistributionHistory> GetAccountDistributionHistory(int accDistrID, string timePeriod)
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
@@ -103,13 +110,15 @@ namespace OnCallDutyPlanner
             }
         }
 
-        private List<Account> GetAllAccounts()
+        private List<Account> GetAllAccounts(string startOfPeriod, string endOfPeriod)
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 List<Account> accounts = new List<Account>();
-                var queryString = "SELECT ID, AccountNumber, ProjectName FROM Accounts";
+                var queryString = "SELECT ID, AccountNumber, ProjectName FROM Accounts WHERE DateCreated < @endOfPeriod AND (DateFinished IS NULL OR DateFinished > @startOfPeriod);";
                 SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@startOfPeriod", startOfPeriod);
+                command.Parameters.AddWithValue("@endOfPeriod", endOfPeriod);
 
                 try
                 {
@@ -125,6 +134,109 @@ namespace OnCallDutyPlanner
                     reader.Close();
                     connection.Close();
                     return accounts;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        private List<AccountDistributionAccounts> GetAllAccountIDFromAccountDistributionAccounts(int accDistID)
+        {
+            using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                List<AccountDistributionAccounts> accounts = new List<AccountDistributionAccounts>();
+                var queryString = "SELECT AccountID, Percentage FROM AccountDistributionAccounts WHERE AccountDistributionID = @accDistID";
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@accDistID", accDistID);
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            accounts.Add(new AccountDistributionAccounts { accountID = reader.GetInt32(0), percentage = reader.GetInt32(1) });
+                        }
+                    }
+                    reader.Close();
+                    connection.Close();
+                    return accounts;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        private List<string> GetAllTeamMembersIDFromDates(int accDistrID, string startOfPeriod, string endOfPeriod)
+        {
+            using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                var queryString = "SELECT DISTINCT UserID FROM Dates WHERE AccountDistributionID = @accDistrID AND WorkDate <= @endOfPeriod AND WorkDate >= @startOfPeriod";
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@accDistrID", accDistrID);
+                command.Parameters.AddWithValue("@startOfPeriod", startOfPeriod);
+                command.Parameters.AddWithValue("@endOfPeriod", endOfPeriod);
+                List<string> teamMembersID = new List<string>();
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            teamMembersID.Add(reader.GetString(0));
+                        }
+                    }
+                    reader.Close();
+                    connection.Close();
+                    return teamMembersID;
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
+            }
+        }
+
+        private List<string> GetAllWorkDayTypesInMonthForWorker(string userID, string startOfPeriod, string endOfPeriod)
+        {
+            using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                var queryString = "SELECT DateType FROM Dates WHERE WorkDate <= @endOfPeriod AND WorkDate >= @startOfPeriod AND UserID = @userID;";
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@userID", userID);
+                command.Parameters.AddWithValue("@startOfPeriod", startOfPeriod);
+                command.Parameters.AddWithValue("@endOfPeriod", endOfPeriod);
+                List<string> workDayTypes = new List<string>();
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            workDayTypes.Add(reader.GetString(0));
+                        }
+                    }
+                    reader.Close();
+                    connection.Close();
+                    return workDayTypes;
 
                 }
                 catch (Exception ex)
@@ -166,24 +278,34 @@ namespace OnCallDutyPlanner
             var manager = new UserManager<IdentityUser>(userStore);
             int ddlYear = Int32.Parse(DropDownYear.SelectedValue);
             int ddlMonth = Int32.Parse(DropDownMonth.SelectedValue);
-            string workPeriod = DropDownYear.SelectedValue + "-" + DropDownMonth.SelectedValue + "-01";
-            List<AccountDistribution> accDistr = GetAllAccountDistributionInPeriod(workPeriod);
+            DateTime startOfSelectedPeriod = new DateTime(ddlYear, ddlMonth, 1);
+            DateTime endOfSelectedPeriod = new DateTime(ddlYear, ddlMonth, DateTime.DaysInMonth(ddlYear, ddlMonth));
+            string startOfSelectedPeriodString = startOfSelectedPeriod.ToString("yyyy-MM-dd");
+            string endOfSelectedPeriodString = endOfSelectedPeriod.ToString("yyyy-MM-dd");
+            List<AccountDistribution> accDistr = GetAllAccountDistributionInPeriod(startOfSelectedPeriodString);
+            List<Account> allAccounts = GetAllAccounts(startOfSelectedPeriodString, endOfSelectedPeriodString);
 
-            
+
             if (accDistr.Count != 0)
             {
-                DateTime dateCheck = new DateTime(ddlYear, ddlMonth, 1);
-                if ((dateCheck.Year == DateTime.Now.Year && dateCheck.Month < DateTime.Now.Month) || dateCheck.Year < DateTime.Now.Year)
+                foreach (AccountDistribution accountDistribution in accDistr)
                 {
-                    foreach (AccountDistribution accountDistribution in accDistr)
-                    {
-                        DataTable dt = new DataTable("AccountDistributionHistory");
-                        DataRow dr;
+                    DateTime dateCheck = new DateTime(ddlYear, ddlMonth, 1);
+                    string teamName = GetTeamName(accountDistribution.teamID);
+                    bool hasData = false;
+                    DataTable dt = new DataTable("AccountDistributionHistory");
+                    DataRow dr;
 
-                        dt.Columns.Add("TeamMembers");
-                        string teamName = GetTeamName(accountDistribution.teamID);
-                        List<AccountDistributionHistory> accDistHistory = GetAccountDistributionHistory(accountDistribution.id, workPeriod);
-                        List<Account> allAccounts = GetAllAccounts();
+                    dt.Columns.Add("TeamMembers");
+
+                    if ((dateCheck.Year == DateTime.Now.Year && dateCheck.Month < DateTime.Now.Month) || dateCheck.Year < DateTime.Now.Year)
+                    {
+                        List<AccountDistributionHistory> accDistHistory = GetAccountDistributionHistory(accountDistribution.id, startOfSelectedPeriodString);
+
+                        if (accDistHistory.Count == 0)
+                        {
+                            break;
+                        }
 
                         string userNameCheck = "";
                         foreach (AccountDistributionHistory accDistHist in accDistHistory)
@@ -221,6 +343,90 @@ namespace OnCallDutyPlanner
                             }
                         }
 
+                        hasData = true;
+                    }
+
+                    else if((ddlMonth == DateTime.Now.Month && ddlYear == DateTime.Now.Year) || (DateTime.Now.Month == 12 && ddlMonth == 1 && ddlYear == (DateTime.Now.Year + 1)) || (ddlMonth == (DateTime.Now.Month + 1) && ddlYear == DateTime.Now.Year))
+                    {
+                        List<AccountDistributionAccounts> accountsInDistribution = GetAllAccountIDFromAccountDistributionAccounts(accountDistribution.id);
+                        List<AccountDistributionHistory> teamMembersHistory = new List<AccountDistributionHistory>();
+                        List<string> teamMembersID = GetAllTeamMembersIDFromDates(accountDistribution.id, startOfSelectedPeriodString, endOfSelectedPeriodString);
+
+                        if (accountsInDistribution.Count == 0 || teamMembersID.Count == 0)
+                        {
+                            break;
+                        }
+
+                        foreach (string teamMemberID in teamMembersID)
+                        {
+                            var user = manager.FindById(teamMemberID);
+                            dr = dt.NewRow();
+                            dr["TeamMembers"] = user.UserName;
+                            dt.Rows.Add(dr);
+                        }
+
+                        foreach (Account account in allAccounts)
+                        {
+                            dt.Columns.Add(account.accountNumber);
+                        }
+
+
+                        for (int i = 0; i < teamMembersID.Count; i++)
+                        {
+                            List<string> allWorkDaysWorker = GetAllWorkDayTypesInMonthForWorker(teamMembersID[i], startOfSelectedPeriodString, endOfSelectedPeriodString);
+                            int totalWorkHoursWorker = 0;
+
+                            for (int j = 0; j < allWorkDaysWorker.Count; j++)
+                            {
+                                if (allWorkDaysWorker[j] == "w")
+                                {
+                                    totalWorkHoursWorker += 16;
+                                }
+                                else if (allWorkDaysWorker[j] == "h")
+                                {
+                                    totalWorkHoursWorker += 24;
+                                }
+                            }
+
+                            for (int z = 0; z < accountsInDistribution.Count; z++)
+                            {
+                                int accID = accountsInDistribution[z].accountID;
+                                int accPercent = accountsInDistribution[z].percentage;
+                                double tempDouble = (double)totalWorkHoursWorker * ((double)accPercent / (double)100);
+                                int hoursWorkedOnAcc = (int)Math.Round(tempDouble, MidpointRounding.AwayFromZero);
+
+                                teamMembersHistory.Add(new AccountDistributionHistory { userID = teamMembersID[i], workPeriod = startOfSelectedPeriodString, accountID = accID, totalHours = hoursWorkedOnAcc, accountDistributionID = accountDistribution.id });
+                            }
+                        }
+
+                        if (teamMembersHistory.Count == 0)
+                        {
+                            break;
+                        }
+
+                        for (int x = 0; x < dt.Rows.Count; x++)
+                        {
+                            foreach (AccountDistributionHistory accDistHist in teamMembersHistory)
+                            {
+                                var user = manager.FindById(accDistHist.userID);
+                                if (user.UserName == dt.Rows[x][0].ToString())
+                                {
+                                    foreach (Account account in allAccounts)
+                                    {
+                                        if (accDistHist.accountID == account.ID)
+                                        {
+                                            dt.Rows[x][account.accountNumber] = accDistHist.totalHours.ToString();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        hasData = true;
+                    }
+
+                    if(hasData == true)
+                    {
                         //count total hours per row
                         dt.Columns.Add("Total");
                         for (int i = 0; i < dt.Rows.Count; i++)
@@ -274,7 +480,7 @@ namespace OnCallDutyPlanner
                         dt.Rows[dt.Rows.Count - 1][dt.Columns.Count - 1] = totals.ToString();
 
                         GridView gv = new GridView();
-                        gv.ID = "gv-" + teamName + "(" + workPeriod + ")";
+                        gv.ID = "gv-" + teamName + "(" + startOfSelectedPeriodString + ")";
                         gv.ClientIDMode = ClientIDMode.Static;
                         gv.RowDataBound += new GridViewRowEventHandler(AccountDistributionHistoryGridView_RowDataBound);
                         gv.DataSource = dt;
@@ -299,10 +505,6 @@ namespace OnCallDutyPlanner
                         row.Controls.Add(MYHeader);
                         gv.HeaderRow.Parent.Controls.AddAt(0, row);
                     }
-                }
-                else if(dateCheck.Year == DateTime.Now.Year && dateCheck.Month == DateTime.Now.Month)
-                {
-
                 }
             }
         }
