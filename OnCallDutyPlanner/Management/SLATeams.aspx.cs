@@ -19,7 +19,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "UPDATE AspNetUsers SET fk_SLATeamID = @teamID WHERE Id = @userID;";
+                var queryString = "UPDATE AspNetUsers SET SLATeamID = @teamID WHERE Id = @userID;";
                 SqlCommand command = new SqlCommand(queryString, connection);
 
                 command.Parameters.AddWithValue("@userID", userID);
@@ -29,13 +29,15 @@ namespace OnCallDutyPlanner
                 {
                     connection.Open();
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
                 catch (Exception ex)
                 {
                     ErrorEditLiteral.Text = string.Format(ex.Message);
                 }
-
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -43,7 +45,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "UPDATE AspNetUsers SET fk_SLATeamID = NULL WHERE Id = @userID;";
+                var queryString = "UPDATE AspNetUsers SET SLATeamID = NULL WHERE Id = @userID;";
                 SqlCommand command = new SqlCommand(queryString, connection);
 
                 command.Parameters.AddWithValue("@userID", userID);
@@ -52,13 +54,15 @@ namespace OnCallDutyPlanner
                 {
                     connection.Open();
                     command.ExecuteNonQuery();
-                    connection.Close();
                 }
                 catch (Exception ex)
                 {
                     ErrorEditLiteral.Text = string.Format(ex.Message);
                 }
-
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -66,7 +70,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "UPDATE SLATeams SET Deleted = 1 WHERE SLATeamID = @teamID;";
+                var queryString = "UPDATE SLATeams SET IsDeleted = 1 WHERE ID = @teamID;";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@teamID", teamID);
 
@@ -79,10 +83,10 @@ namespace OnCallDutyPlanner
                 }
                 catch (Exception ex)
                 {
+                    connection.Close();
                     ErrorEditLiteral.Text = string.Format(ex.Message);
                     return -1;
                 }
-
             }
         }
 
@@ -90,7 +94,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "INSERT INTO SLATeams(Name) VALUES (@name);";
+                var queryString = "INSERT INTO SLATeams(TeamName) VALUES (@name);";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@name", teamName);
 
@@ -103,6 +107,7 @@ namespace OnCallDutyPlanner
                 }
                 catch (Exception ex)
                 {
+                    connection.Close();
                     CreateTeamLiteral.Text = string.Format(ex.Message);
                     return -1;
                 }
@@ -115,7 +120,7 @@ namespace OnCallDutyPlanner
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 int teamID;
-                var queryString = "SELECT SLATeamID FROM SLATeams WHERE Name = @teamName";
+                var queryString = "SELECT ID FROM SLATeams WHERE TeamName = @teamName";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@teamName", teamName);
 
@@ -125,39 +130,47 @@ namespace OnCallDutyPlanner
                     teamID = (Int32)command.ExecuteScalar();
                     connection.Close();
                     return teamID;
-
                 }
                 catch (Exception ex)
                 {
+                    connection.Close();
                     ErrorEditLiteral.Text = string.Format(ex.Message);
                     return -1;
                 }
-
             }
         }
 
-        private int? GetUserTeamID(string userID)
+        private int GetUserTeamID(string userID)
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                int? userTeamID;
-                var queryString = "SELECT fk_SLATeamID FROM AspNetUsers WHERE Id = @userID";
+                int userTeamID = - 1;
+                var queryString = "SELECT SLATeamID FROM AspNetUsers WHERE Id = @userID";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@userID", userID);
 
                 try
                 {
                     connection.Open();
-                    userTeamID = (Int32)command.ExecuteScalar();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            if(!reader.IsDBNull(0))
+                                userTeamID = reader.GetInt32(0);
+                        }
+                    }
+                    reader.Close();
                     connection.Close();
                     return userTeamID;
-
                 }
                 catch (Exception ex)
                 {
-                    return null;
+                    connection.Close();
+                    Console.WriteLine(ex.Message);
+                    return -2;
                 }
-
             }
         }
 
@@ -166,7 +179,7 @@ namespace OnCallDutyPlanner
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 bool userIsDeleted;
-                var queryString = "SELECT Deleted FROM AspNetUsers WHERE Id = @userID";
+                var queryString = "SELECT IsDeleted FROM AspNetUsers WHERE Id = @userID";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@userID", userID);
 
@@ -180,6 +193,7 @@ namespace OnCallDutyPlanner
                 }
                 catch (Exception ex)
                 {
+                    connection.Close();
                     Console.WriteLine(ex.Message);
                     return true;
                 }
@@ -190,7 +204,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "SELECT Name FROM SLATeams WHERE Deleted = 0";
+                var queryString = "SELECT TeamName FROM SLATeams WHERE IsDeleted = 0";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 List<string> teams = new List<string>();
 
@@ -222,7 +236,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "SELECT UserName FROM AspNetUsers WHERE fk_SLATeamID = @teamID";
+                var queryString = "SELECT UserName FROM AspNetUsers WHERE SLATeamID = @teamID";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@teamID", teamID);
                 List<string> teamMembers = new List<string>();
@@ -271,7 +285,8 @@ namespace OnCallDutyPlanner
 
             foreach (var user in manager.Users.ToList().OrderBy(usr => usr.UserName.ToString()))
             {
-                if (GetUserTeamID(user.Id.ToString()) == null && IsUserDeleted(user.Id) == false)
+                int userTeamID = GetUserTeamID(user.Id.ToString());
+                if (userTeamID != -1 && userTeamID != -2 && IsUserDeleted(user.Id) == false)
                 {
                     listBox.Items.Add(user.UserName.ToString());
                 }
@@ -316,7 +331,7 @@ namespace OnCallDutyPlanner
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
-                var queryString = "UPDATE SLATeams SET Name = @newName WHERE SLATeamID = @teamID;";
+                var queryString = "UPDATE SLATeams SET TeamName = @newName WHERE ID = @teamID;";
                 SqlCommand command = new SqlCommand(queryString, connection);
 
                 command.Parameters.AddWithValue("@newName", newName);
@@ -332,7 +347,10 @@ namespace OnCallDutyPlanner
                 {
                     EditWarningLiteral.Text = string.Format(ex.Message);
                 }
-
+                finally 
+                { 
+                    connection.Close(); 
+                }
             }
         }
 

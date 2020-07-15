@@ -78,31 +78,13 @@ namespace OnCallDutyPlanner
         protected global::System.Web.UI.WebControls.TextBox ProjectName;
 
         /// <summary>
-        /// ProjectUID control.
+        /// AccountNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ProjectUID;
-
-        /// <summary>
-        /// ProjectDesc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox ProjectDesc;
-
-        /// <summary>
-        /// TeamsListBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox TeamsListBox;
+        protected global::System.Web.UI.WebControls.TextBox AccountNumber;
 
         /// <summary>
         /// CreateProjectButton control.
@@ -168,22 +150,13 @@ namespace OnCallDutyPlanner
         protected global::System.Web.UI.WebControls.HiddenField HiddenEditProjectName;
 
         /// <summary>
-        /// HiddenEditProjectUID control.
+        /// HiddenEditAccountNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenEditProjectUID;
-
-        /// <summary>
-        /// HiddenEditProjectDesc control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField HiddenEditProjectDesc;
+        protected global::System.Web.UI.WebControls.HiddenField HiddenEditAccountNumber;
 
         /// <summary>
         /// HiddenEditRowIndex control.
@@ -213,40 +186,13 @@ namespace OnCallDutyPlanner
         protected global::System.Web.UI.WebControls.TextBox NewProjectNameTextBox;
 
         /// <summary>
-        /// NewProjectUIDTextBox control.
+        /// NewAccountNumberTextBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox NewProjectUIDTextBox;
-
-        /// <summary>
-        /// NewProjectDescTextBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox NewProjectDescTextBox;
-
-        /// <summary>
-        /// EditCurrentTeamsListBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox EditCurrentTeamsListBox;
-
-        /// <summary>
-        /// EditAvailableTeamsListBox control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox EditAvailableTeamsListBox;
+        protected global::System.Web.UI.WebControls.TextBox NewAccountNumberTextBox;
 
         /// <summary>
         /// SaveEditButton control.

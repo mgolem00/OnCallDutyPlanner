@@ -34,17 +34,9 @@
                 <div>
                     <asp:TextBox runat="server" ID="ProjectName" />
                 </div>
-                <asp:Label runat="server" AssociatedControlID="ProjectUID">Project Unique ID</asp:Label>
+                <asp:Label runat="server" AssociatedControlID="AccountNumber">Account Number</asp:Label>
                 <div>
-                    <asp:TextBox runat="server" ID="ProjectUID" />
-                </div>
-                <asp:Label runat="server" AssociatedControlID="ProjectDesc">Project description</asp:Label>
-                <div>
-                    <asp:TextBox runat="server" ID="ProjectDesc" />
-                </div>
-                <asp:Label runat="server" AssociatedControlID="TeamsListBox">Teams</asp:Label>
-                <div>
-                    <asp:ListBox runat="server" ID="TeamsListBox" SelectionMode="Multiple"></asp:ListBox>
+                    <asp:TextBox runat="server" ID="AccountNumber" />
                 </div>
                 <div>
                     <asp:Button ID="CreateProjectButton" runat="server" OnClick="CreateProject_Click" Text="Create" />
@@ -69,15 +61,9 @@
                             </ItemTemplate>
                         </asp:TemplateField>
 
-                        <asp:TemplateField HeaderText="Project Uniqued ID">
+                        <asp:TemplateField HeaderText="Account Number">
                             <ItemTemplate>
-                                <asp:Label ID="lbl_ProjectUID" runat="server" Text='<%#Eval("lbl_ProjectUID") %>'></asp:Label>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                        <asp:TemplateField HeaderText="Description">
-                            <ItemTemplate>
-                                <asp:Label ID="lbl_ProjectDesc" runat="server" Text='<%#Eval("lbl_ProjectDesc") %>'></asp:Label>
+                                <asp:Label ID="lbl_AccountNumber" runat="server" Text='<%#Eval("lbl_AccountNumber") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                         
@@ -86,16 +72,6 @@
                                 <asp:Repeater ID="TeamsRepeater" runat="server" DataSource='<%# Eval("lbl_Teams") %>' >
                                     <ItemTemplate>
                                         <asp:Label ID="lbl_Teams" runat="server" Text='<%# Container.DataItem %>'></asp:Label><br />
-                                    </ItemTemplate>
-                                </asp:Repeater>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-
-                        <asp:TemplateField HeaderText="Past teams">
-                            <ItemTemplate>
-                                <asp:Repeater ID="TeamsRepeater" runat="server" DataSource='<%# Eval("lbl_PastTeams") %>' >
-                                    <ItemTemplate>
-                                        <asp:Label ID="lbl_PastTeams" runat="server" Text='<%# Container.DataItem %>'></asp:Label><br />
                                     </ItemTemplate>
                                 </asp:Repeater>
                             </ItemTemplate>
@@ -134,8 +110,7 @@
             <hr/>
             <asp:Panel ID="EditProjectPanel" runat="server" Visible="false">
                 <asp:HiddenField ID="HiddenEditProjectName" runat="server" Visible="false" />
-                <asp:HiddenField ID="HiddenEditProjectUID" runat="server" Visible="false" />
-                <asp:HiddenField ID="HiddenEditProjectDesc" runat="server" Visible="false" />
+                <asp:HiddenField ID="HiddenEditAccountNumber" runat="server" Visible="false" />
                 <asp:HiddenField ID="HiddenEditRowIndex" runat="server" Visible="false" />
                 <p>
                     <asp:Literal runat="server" ID="EditWarningLiteral" />
@@ -144,23 +119,10 @@
                 <div>
                     <asp:TextBox runat="server" ID="NewProjectNameTextBox" />                
                 </div>
-                <asp:Label runat="server" AssociatedControlID="NewProjectUIDTextBox">Project name</asp:Label>
+                <asp:Label runat="server" AssociatedControlID="NewAccountNumberTextBox">Account number</asp:Label>
                 <div>
-                    <asp:TextBox runat="server" ID="NewProjectUIDTextBox" />                
+                    <asp:TextBox runat="server" ID="NewAccountNumberTextBox" />                
                 </div>
-                <asp:Label runat="server" AssociatedControlID="NewProjectDescTextBox">Project name</asp:Label>
-                <div>
-                    <asp:TextBox runat="server" ID="NewProjectDescTextBox" />                
-                </div>
-                <asp:Label runat="server" AssociatedControlID="EditCurrentTeamsListBox">Current teams (select to remove from project)</asp:Label>
-                <div>
-                    <asp:ListBox runat="server" ID="EditCurrentTeamsListBox" SelectionMode="Multiple"></asp:ListBox>
-                </div>
-                <asp:Label runat="server" AssociatedControlID="EditAvailableTeamsListBox">Available teams (select to add to project)</asp:Label>
-                <div>
-                    <asp:ListBox runat="server" ID="EditAvailableTeamsListBox" SelectionMode="Multiple"></asp:ListBox>
-                </div>
-
                 <div>
                     <asp:Button ID="SaveEditButton" runat="server" OnClick="SaveEditProject_Click" Text="Save" />
                     <asp:Button ID="ApplyEditButton" runat="server" OnClick="ApplyEditProject_Click" Text="Apply" />

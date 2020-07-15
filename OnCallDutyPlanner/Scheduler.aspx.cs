@@ -1288,7 +1288,7 @@ namespace OnCallDutyPlanner
                 }
                 catch (Exception ex)
                 {
-                    //ErrorEditLiteral.Text = string.Format(ex.Message);
+                    Console.WriteLine(ex.Message);
                     return null;
                 }
             }
