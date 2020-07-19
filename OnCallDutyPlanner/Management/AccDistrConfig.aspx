@@ -43,7 +43,7 @@
                                     <Columns>
                                         <asp:TemplateField HeaderText="Percentage">
                                             <ItemTemplate>
-                                                <asp:TextBox runat="server" ID="percentTxtBox" OnTextChanged="percentTxtBox_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                                <asp:TextBox runat="server" ID="percentTxtBox" OnTextChanged="percentTxtBox_TextChanged" AutoPostBack="true" onfocus="DisableOtherControls()" onblur="EnableOtherControls()"></asp:TextBox>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="Account">
@@ -53,7 +53,7 @@
                                         </asp:TemplateField>
                                         <asp:TemplateField>
                                             <ItemTemplate>
-                                                <asp:LinkButton runat="server" ID="RemoveRowBtn" Text="Remove" CommandName="RemoveRow" CommandArgument="<%# Container.DataItemIndex %>" />
+                                                <asp:Button runat="server" ID="RemoveRowBtn" Text="Remove" CommandName="RemoveRow" CommandArgument="<%# Container.DataItemIndex %>" />
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                     </Columns>
@@ -88,14 +88,26 @@
         </div>
     </form>
 
-    <%--
-    <script type="text/javascript">
-        function ShowModalPopup() {
-            $find("ModalPopupExtender1").show();
+    <script>
+        function DisableOtherControls() {
+            var x = document.getElementById('<%= AccountsListGridView.ClientID %>').querySelectorAll("[type=submit], select");
+            for (var i = 0; i < x.length; i++) {
+                x[i].disabled = true;
+            }
+            document.getElementById('<%= AddAccountButton.ClientID %>').disabled = true;
+            document.getElementById('<%= CreateAccDistrConfigButton.ClientID %>').disabled = true;
+            document.getElementById('<%= CancelCreateAccDistrConfigButton.ClientID %>').disabled = true;
         }
-        function HideModalPopup() {
-            $find("ModalPopupExtender1").hide();
+
+        function EnableOtherControls() {
+            var x = document.getElementById('<%= AccountsListGridView.ClientID %>').querySelectorAll("[type=submit], select");
+            for (var i = 0; i < x.length; i++) {
+                x[i].disabled = false;
+            }
+            document.getElementById('<%= AddAccountButton.ClientID %>').disabled = false;
+            document.getElementById('<%= CreateAccDistrConfigButton.ClientID %>').disabled = false;
+            document.getElementById('<%= CancelCreateAccDistrConfigButton.ClientID %>').disabled = false;
         }
-    </script>--%>
+    </script>
 </body>
 </html>

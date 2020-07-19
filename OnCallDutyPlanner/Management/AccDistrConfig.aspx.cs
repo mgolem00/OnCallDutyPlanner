@@ -414,7 +414,7 @@ namespace OnCallDutyPlanner.Management
                     ddl.SelectedValue = dr["Account"].ToString();
                 }
 
-                LinkButton btn = (LinkButton)e.Row.FindControl("RemoveRowBtn");
+                Button btn = (Button)e.Row.FindControl("RemoveRowBtn");
             }
         }
 
@@ -427,6 +427,10 @@ namespace OnCallDutyPlanner.Management
             DataTable dt = (DataTable)ViewState["panelContents"];
             dt.Rows[rowIndex][0] = txtBox.Text;
             ViewState["panelContents"] = dt;
+
+            AddAccountButton.Enabled = true;
+            CreateAccDistrConfigButton.Enabled = true;
+            CancelCreateAccDistrConfigButton.Enabled = true;
         }
 
         protected void ddlAccount_IndexChanged(object sender, EventArgs e)
