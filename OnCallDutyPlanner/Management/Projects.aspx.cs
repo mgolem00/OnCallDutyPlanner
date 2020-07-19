@@ -270,7 +270,7 @@ namespace OnCallDutyPlanner
             {
                 for (int i = 0; i < ProjectsGridView.Rows.Count; i++)
                 {
-                    Label projectU = ProjectsGridView.Rows[i].FindControl("lbl_ProjectUID") as Label;
+                    Label projectU = ProjectsGridView.Rows[i].FindControl("lbl_AccountNumber") as Label;
                     if (accountNumber == projectU.Text)
                     {
                         isTaken = true;
@@ -430,41 +430,12 @@ namespace OnCallDutyPlanner
             HiddenEditRowIndex.Value = null;
         }
 
-        protected void ListAllTeams(ListBox listBox)
-        {
-            using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
-            {
-                var queryString = "SELECT TeamName FROM SLATeams WHERE IsDeleted = 0;";
-                SqlCommand command = new SqlCommand(queryString, connection);
-                List<string> projectsUIDDesc = new List<string>();
-
-                try
-                {
-                    connection.Open();
-                    SqlDataReader reader = command.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            listBox.Items.Add(reader.GetString(0));
-                        }
-                    }
-                    reader.Close();
-                    connection.Close();
-                }
-                catch (Exception ex)
-                {
-                    CreateProjectLiteral.Text = string.Format(ex.Message);
-                }
-            }
-        }
-
         private int CreateProject(string projectName, string accountNumber)
         {
             using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
             {
                 string dateCreated = DateTime.Now.ToString("yyyy-MM") + "-01";
-                var queryString = "INSERT INTO Projects(Name, AccountNumber, DateCreated) VALUES (@projectName, @accountNumber, @dateCreated);";
+                var queryString = "INSERT INTO Accounts(ProjectName, AccountNumber, DateCreated) VALUES (@projectName, @accountNumber, @dateCreated);";
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@projectName", projectName);
                 command.Parameters.AddWithValue("@accountNumber", accountNumber);
@@ -479,6 +450,7 @@ namespace OnCallDutyPlanner
                 }
                 catch (Exception ex)
                 {
+                    connection.Close();
                     CreateProjectLiteral.Text = string.Format(ex.Message);
                     return -1;
                 }
@@ -509,7 +481,7 @@ namespace OnCallDutyPlanner
             for (int i = 0; i < ProjectsGridView.Rows.Count; i++)
             {
                 Label lbl_teamN = ProjectsGridView.Rows[i].FindControl("lbl_ProjectName") as Label;
-                Label lbl_accountNumber = ProjectsGridView.Rows[i].FindControl("lbl_ProjectUID") as Label;
+                Label lbl_accountNumber = ProjectsGridView.Rows[i].FindControl("lbl_AccountNumber") as Label;
                 if (projectName == lbl_teamN.Text && accountNumber == lbl_accountNumber.Text)
                 {
                     isNameTaken = true;
@@ -528,12 +500,6 @@ namespace OnCallDutyPlanner
                     isAccountNumberTaken = true;
                     break;
                 }
-                else
-                {
-                    isNameTaken = false;
-                    isAccountNumberTaken = false;
-                    break;
-                }
             }
 
             if (isNameTaken == false && isAccountNumberTaken == false)
@@ -546,7 +512,7 @@ namespace OnCallDutyPlanner
                 }
                 else if (result == -1)
                 {
-                    CreateProjectLiteral.Text = string.Format("Something has gone horribly wrong! COULD NOT CREATE TEAM!");
+                    CreateProjectLiteral.Text = string.Format("Something has gone horribly wrong! COULD NOT CREATE PROJECT!");
                 }
                 else
                 {
@@ -560,7 +526,7 @@ namespace OnCallDutyPlanner
             }
             else
             {
-                CreateProjectLiteral.Text = string.Format("Project name or UID already taken! Choose another one!");
+                CreateProjectLiteral.Text = string.Format("Project name or Account Number already taken! Choose another one!");
                 ProjectName.Text = null;
                 AccountNumber.Text = null;
             }

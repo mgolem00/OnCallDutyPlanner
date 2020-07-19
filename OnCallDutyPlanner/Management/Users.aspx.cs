@@ -288,6 +288,7 @@ namespace OnCallDutyPlanner
             var manager = new UserManager<IdentityUser>(userStore);
             bool[] updatesMade = new bool[3];
             var user = manager.FindByName(HiddenEditUsername.Value);
+            string userID = user.Id;
             bool isEmpty = false;
 
             isEmpty = string.IsNullOrWhiteSpace(NewUserNameTextBox.Text);
@@ -311,7 +312,34 @@ namespace OnCallDutyPlanner
             isEmpty = string.IsNullOrWhiteSpace(NewPasswordTextBox.Text);
             if (isEmpty == false)
             {
-                var result1 = manager.RemovePassword(user.Id);
+                if (manager.HasPassword(userID))
+                {
+                    var result1 = manager.RemovePassword(userID);
+                    if(result1.Succeeded)
+                    {
+                        string newPwd = NewPasswordTextBox.Text;
+                        string passwordHash = manager.PasswordHasher.HashPassword(newPwd);
+                        user.PasswordHash = passwordHash;
+                        var result2 = manager.Update(user);
+
+                        if (result2.Succeeded)
+                        {
+                            updatesMade[1] = true;
+                        }
+                        else
+                        {
+                            ErrorEditLiteral.Text = string.Format("(2)Password change failed!");
+                            updatesMade[1] = false;
+                        }
+                    }
+                }
+                else
+                {
+                    ErrorEditLiteral.Text = string.Format("(1)Password change failed!");
+                    updatesMade[1] = false;
+                }
+                
+                /*var result1 = manager.RemovePassword(user.Id);
                 if (result1.Succeeded)
                 {
                     string newPwd = NewPasswordTextBox.Text;
@@ -330,17 +358,17 @@ namespace OnCallDutyPlanner
                 {
                     ErrorEditLiteral.Text = string.Format("(1)Password change failed!");
                     updatesMade[2] = false;
-                }
+                }*/
             }
             else updatesMade[1] = false;
 
             if (HiddenEditRole.Value != EditRoleDropDown.SelectedValue)
             {
-                string[] allUserRoles = manager.GetRoles(user.Id).ToArray();
-                var result1 = manager.RemoveFromRoles(user.Id, allUserRoles);
+                string[] allUserRoles = manager.GetRoles(userID).ToArray();
+                var result1 = manager.RemoveFromRoles(userID, allUserRoles);
                 if (result1.Succeeded)
                 {
-                    var result2 = manager.AddToRole(user.Id, EditRoleDropDown.SelectedValue);
+                    var result2 = manager.AddToRole(userID, EditRoleDropDown.SelectedValue);
                     if (result2.Succeeded)
                     {
                         updatesMade[2] = true;

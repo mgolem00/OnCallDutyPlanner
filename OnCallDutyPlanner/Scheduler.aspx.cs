@@ -588,11 +588,6 @@ namespace OnCallDutyPlanner
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                /*string headerAccDistrID = e.Row.NamingContainer.ID;
-                int found = headerAccDistrID.IndexOf("(");
-                headerAccDistrID = headerAccDistrID.Substring(found + 1).Replace(")", "");
-                int recipeID = Int32.Parse(headerAccDistrID);*/
-
                 if (e.Row.Cells[0].Text == User.Identity.Name && DateTime.Now.Month.ToString() == DropDownMonth.SelectedValue && DateTime.Now.Year.ToString() == DropDownYear.SelectedValue)
                 {
                     for (int i = 1; i < e.Row.Cells.Count; i++)
@@ -616,6 +611,10 @@ namespace OnCallDutyPlanner
                             dateType.Items.Add("w");
                             dateType.Items.Add("h");
                             dateType.SelectedValue = dateTypeDB;
+                            if(dateTypeDB == "w"|| dateTypeDB == "h")
+                            {
+                                dateType.BackColor = Color.LightGray;
+                            }
 
                             e.Row.Cells[i].Controls.Add(dateType);
                         }
@@ -704,6 +703,10 @@ namespace OnCallDutyPlanner
                         dateType.Items.Add("w");
                         dateType.Items.Add("h");
                         dateType.SelectedValue = dateTypeDB;
+                        if (dateTypeDB == "w" || dateTypeDB == "h")
+                        {
+                            dateType.BackColor = Color.LightGray;
+                        }
 
                         e.Row.Cells[i].Controls.Add(dateType);
                     }

@@ -286,7 +286,7 @@ namespace OnCallDutyPlanner
             foreach (var user in manager.Users.ToList().OrderBy(usr => usr.UserName.ToString()))
             {
                 int userTeamID = GetUserTeamID(user.Id.ToString());
-                if (userTeamID != -1 && userTeamID != -2 && IsUserDeleted(user.Id) == false)
+                if (userTeamID == -1 && userTeamID != -2 && IsUserDeleted(user.Id) == false)
                 {
                     listBox.Items.Add(user.UserName.ToString());
                 }
@@ -405,19 +405,18 @@ namespace OnCallDutyPlanner
             {
                 int result = CreateTeam(teamName);
 
-                foreach (ListItem li in UserListBox.Items)
-                {
-                    if (li.Selected == true)
-                    {
-                        var user = manager.FindByName(li.Text);
-                        string userID = user.Id.ToString();
-                        int teamID = GetTeamID(teamName);
-                        InsertUserToTeam(teamID, userID);
-                    }
-                }
-
                 if (result == 1)
                 {
+                    foreach (ListItem li in UserListBox.Items)
+                    {
+                        if (li.Selected == true)
+                        {
+                            var user = manager.FindByName(li.Text);
+                            string userID = user.Id.ToString();
+                            int teamID = GetTeamID(teamName);
+                            InsertUserToTeam(teamID, userID);
+                        }
+                    }
                     CreateTeamLiteral.Text = string.Format("{0} was created successfully!", teamName);
                 }
                 else if (result == -1)
