@@ -33,6 +33,11 @@
             <br />
             <asp:Panel runat="server" ID="GridViewsPanel"></asp:Panel>
         </div>
+
+        <div class="footer">
+            <span style="float:left; text-align:left;">How to use: <a href="#" target="_blank" style="color:gray;">Manual</a></span>
+            <span style="float:right; text-align:right;">Made by: <a href="https://github.com/mgolem00" target="_blank" style="color:gray;">Marin Golem</a></span>
+        </div>
     </form>
 </body>
 </html>

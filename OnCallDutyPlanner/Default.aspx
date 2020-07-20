@@ -13,43 +13,48 @@
         <div class="topnav">
             <a id="logo">On-Call Duty Planner</a>
         </div>
-    <div class="main">
-        <div>
-         <h4 style="font-size: medium">Log In</h4>
-         <hr />
-         <asp:PlaceHolder runat="server" ID="LoginStatus" Visible="false">
-            <p>
-               <asp:Literal runat="server" ID="StatusText" />
-            </p>
-         </asp:PlaceHolder>
-         <asp:PlaceHolder runat="server" ID="LoginForm" Visible="false">
-            <div style="margin-bottom: 10px">
-               <asp:Label runat="server" AssociatedControlID="UserName">User name</asp:Label>
-               <div>
-                  <asp:TextBox runat="server" ID="UserName" />
-               </div>
-            </div>
-            <div style="margin-bottom: 10px">
-               <asp:Label runat="server" AssociatedControlID="Password">Password</asp:Label>
-               <div>
-                  <asp:TextBox runat="server" ID="Password" TextMode="Password" />
-               </div>
-            </div>
-            <div style="margin-bottom: 10px">
-               <div>
-                  <asp:Button runat="server" OnClick="SignIn" Text="Log in" />
-               </div>
-            </div>
-         </asp:PlaceHolder>
-         <asp:PlaceHolder runat="server" ID="LogoutButton" Visible="false">
+        <div class="main">
             <div>
-               <div>
-                  <asp:Button runat="server" OnClick="SignOut" Text="Log out" />
-               </div>
+                <h4 style="font-size: medium">Log In</h4>
+                <hr />
+                <asp:PlaceHolder runat="server" ID="LoginStatus" Visible="false">
+                    <p>
+                        <asp:Literal runat="server" ID="StatusText" />
+                    </p>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder runat="server" ID="LoginForm" Visible="false">
+                    <div style="margin-bottom: 10px">
+                        <asp:Label runat="server" AssociatedControlID="UserName">User name</asp:Label>
+                        <div>
+                            <asp:TextBox runat="server" ID="UserName" />
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px">
+                        <asp:Label runat="server" AssociatedControlID="Password">Password</asp:Label>
+                        <div>
+                            <asp:TextBox runat="server" ID="Password" TextMode="Password" />
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 10px">
+                        <div>
+                            <asp:Button runat="server" OnClick="SignIn" Text="Log in" />
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+                <asp:PlaceHolder runat="server" ID="LogoutButton" Visible="false">
+                    <div>
+                        <div>
+                            <asp:Button runat="server" OnClick="SignOut" Text="Log out" />
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
             </div>
-         </asp:PlaceHolder>
-      </div>
-    </div>
+        </div>
+
+        <div class="footer">
+            <span style="float:left; text-align:left;">How to use: <a href="#" target="_blank" style="color:gray;">Manual</a></span>
+            <span style="float:right; text-align:right;">Made by: <a href="https://github.com/mgolem00" target="_blank" style="color:gray;">Marin Golem</a></span>
+        </div>
     </form>
 </body>
 </html>

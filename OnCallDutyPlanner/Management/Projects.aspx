@@ -91,19 +91,20 @@
                         
                         <asp:TemplateField ShowHeader="false">
                             <ItemTemplate>
-                                <asp:LinkButton ID="EditButton" Text="Edit" runat="server" CommandName="EditProject" CommandArgument="<%# Container.DataItemIndex %>" />
-                                <asp:LinkButton ID="EndButton" Text="End" runat="server" CommandName="EndProject" CommandArgument="<%# Container.DataItemIndex %>" />
+                                <asp:Button ID="EditButton" Text="Edit" runat="server" CommandName="EditProject" CommandArgument="<%# Container.DataItemIndex %>" />
+                                <asp:Button ID="EndButton" Text="End" runat="server" CommandName="EndProject" CommandArgument="<%# Container.DataItemIndex %>" />
                             </ItemTemplate>
                         </asp:TemplateField>
 
                         <asp:TemplateField ShowHeader="false" Visible="false">
                             <ItemTemplate>
                                 <asp:Label runat="server" Text="Project completed? "></asp:Label>
-                                <asp:LinkButton ID="YesEndButton" Text="Yes" runat="server" CommandName="YesEnd" CommandArgument="<%# Container.DataItemIndex %>" />
-                                <asp:LinkButton ID="NoEndButton" Text="No" runat="server" CommandName="NoEnd" />
+                                <asp:Button ID="YesEndButton" Text="Yes" runat="server" CommandName="YesEnd" CommandArgument="<%# Container.DataItemIndex %>" />
+                                <asp:Button ID="NoEndButton" Text="No" runat="server" CommandName="NoEnd" />
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
+                    <HeaderStyle BackColor="LightSkyBlue" />
                 </asp:GridView>
             </div>
             
@@ -129,6 +130,11 @@
                     <asp:Button ID="CancelEditButton" runat="server" OnClick="CancelEditProject_Click" Text="Cancel" />
                 </div>
             </asp:Panel>
+        </div>
+
+        <div class="footer">
+            <span style="float:left; text-align:left;">How to use: <a href="#" target="_blank" style="color:gray;">Manual</a></span>
+            <span style="float:right; text-align:right;">Made by: <a href="https://github.com/mgolem00" target="_blank" style="color:gray;">Marin Golem</a></span>
         </div>
     </form>
 </body>

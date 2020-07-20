@@ -35,6 +35,7 @@
                     <asp:Label ID="lbl_SuccessCreate" runat="server" Text="Account Distribution succesfully created!" ForeColor="Green" Visible="false"></asp:Label>
                     <asp:ModalPopupExtender ID="ModalPopupExtender1" runat="server" ClientIDMode="Static" TargetControlID="modalPlaceholderButton" PopupControlID="PopupCreateAccDistrConfigPanel" CancelControlID="CancelCreateAccDistrConfigButton" OkControlID="modalPlaceholderButton" BackgroundCssClass="modalPopupBackground"></asp:ModalPopupExtender>
                     <asp:Panel runat="server" ID="PopupCreateAccDistrConfigPanel" CssClass="popup">
+                        <asp:Label runat="server" ID="TeamNamePopupLabel"></asp:Label>
                         <asp:Label runat="server" ID="SumWarningLabel" Text="The sum of all percentages needs to be 100!" ForeColor="Red" Visible="false"></asp:Label><br />
                         <asp:Label runat="server" ID="ErrorDDLTxtBoxLabel" ForeColor="Red" Visible="false"></asp:Label><br />
                         <asp:UpdatePanel runat="server" ID="AddAccDistrUpdatePanel" UpdateMode="Conditional" ChildrenAsTriggers="true">
@@ -85,6 +86,11 @@
             <br />
 
             <asp:Panel runat="server" ID="GridViewsPanel"></asp:Panel>
+        </div>
+
+        <div class="footer">
+            <span style="float:left; text-align:left;">How to use: <a href="#" target="_blank" style="color:gray;">Manual</a></span>
+            <span style="float:right; text-align:right;">Made by: <a href="https://github.com/mgolem00" target="_blank" style="color:gray;">Marin Golem</a></span>
         </div>
     </form>
 

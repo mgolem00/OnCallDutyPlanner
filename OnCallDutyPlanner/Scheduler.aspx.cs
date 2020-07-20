@@ -703,9 +703,13 @@ namespace OnCallDutyPlanner
                         dateType.Items.Add("w");
                         dateType.Items.Add("h");
                         dateType.SelectedValue = dateTypeDB;
-                        if (dateTypeDB == "w" || dateTypeDB == "h")
+                        if (dateTypeDB == "w")
                         {
-                            dateType.BackColor = Color.LightGray;
+                            dateType.BackColor = Color.LightGreen;
+                        }
+                        else if(dateTypeDB == "h")
+                        {
+                            dateType.BackColor = Color.GreenYellow;
                         }
 
                         e.Row.Cells[i].Controls.Add(dateType);
@@ -736,14 +740,14 @@ namespace OnCallDutyPlanner
 
             else if(e.Row.RowType == DataControlRowType.Footer)
             {
-                LinkButton autoInsertBtn = new LinkButton();
+                Button autoInsertBtn = new Button();
                 autoInsertBtn.ID = "AutoGenerateScheduleBtn" + "-" + e.Row.NamingContainer.ID;
                 autoInsertBtn.ClientIDMode = ClientIDMode.Static;
                 autoInsertBtn.CommandName = "AutoGenerateSchedule";
                 autoInsertBtn.CommandArgument = e.Row.NamingContainer.ID;
                 autoInsertBtn.Text = "Auto Generate Schedule";
 
-                LinkButton createHistoryBtn = new LinkButton();
+                Button createHistoryBtn = new Button();
                 createHistoryBtn.ID = "CreateHistoryBtn" + "-" + e.Row.NamingContainer.ID;
                 createHistoryBtn.ClientIDMode = ClientIDMode.Static;
                 createHistoryBtn.CommandName = "CreateHistory";
@@ -1111,8 +1115,9 @@ namespace OnCallDutyPlanner
                     TableHeaderCell MYHeader = new TableHeaderCell();
                     MYHeader.Text = teamName;
                     MYHeader.ColumnSpan = dt.Columns.Count;
-                    MYHeader.BackColor = Color.Aquamarine;
+                    MYHeader.BackColor = Color.LightSkyBlue;
                     row.Controls.Add(MYHeader);
+                    gv.FooterStyle.BackColor = Color.LightSteelBlue;
                     gv.HeaderRow.Parent.Controls.AddAt(0, row);
                 }
             }
@@ -1205,10 +1210,10 @@ namespace OnCallDutyPlanner
                         TableHeaderCell MYHeader = new TableHeaderCell();
                         MYHeader.Text = teamName;
                         MYHeader.ColumnSpan = dt.Columns.Count;
-                        MYHeader.BackColor = Color.Aquamarine;
+                        MYHeader.BackColor = Color.LightSkyBlue;
                         row.Controls.Add(MYHeader);
+                        gv.FooterStyle.BackColor = Color.LightSteelBlue;
                         gv.HeaderRow.Parent.Controls.AddAt(0, row);
-
                     }
                 }
                 else if(accountDistributions.Count == 0)

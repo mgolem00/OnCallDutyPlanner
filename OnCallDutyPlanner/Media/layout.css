@@ -1,11 +1,20 @@
-﻿body {
+﻿html, body {
     font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
     margin: 0;
+    padding: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
 .main {
     padding: 10px;
     background-color: whitesmoke;
+    flex: 1;
 }
 
 .popup {
@@ -60,4 +69,10 @@
 
 .topnav-right #logout {
     background-color: crimson;
+}
+
+.footer {
+    background-color: #333;
+    color: gray;
+    padding: 10px;
 }

@@ -240,7 +240,7 @@ namespace OnCallDutyPlanner.Management
                     TableHeaderCell MYHeader = new TableHeaderCell();
                     MYHeader.Text = teamName;
                     MYHeader.ColumnSpan = dt.Columns.Count;
-                    MYHeader.BackColor = Color.Aquamarine;
+                    MYHeader.BackColor = Color.LightSkyBlue;
                     row.Controls.Add(MYHeader);
                     gv.HeaderRow.Parent.Controls.AddAt(0, row);
                 }
@@ -341,6 +341,8 @@ namespace OnCallDutyPlanner.Management
 
         protected void OpenCreateAccDistrConfigButton_Click(object sender, EventArgs e)
         {
+            TeamNamePopupLabel.Text = ChooseTeamDDL.SelectedValue;
+
             if (ChooseTeamDDL.SelectedValue != "---")
             {
                 string workPeriod = "";

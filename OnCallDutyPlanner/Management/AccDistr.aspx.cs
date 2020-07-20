@@ -649,7 +649,7 @@ namespace OnCallDutyPlanner
                     TableHeaderCell MYHeader = new TableHeaderCell();
                     MYHeader.Text = teamName;
                     MYHeader.ColumnSpan = dt.Columns.Count;
-                    MYHeader.BackColor = Color.Aquamarine;
+                    MYHeader.BackColor = Color.LightSkyBlue;
                     row.Controls.Add(MYHeader);
                     gv.HeaderRow.Parent.Controls.AddAt(0, row);
                 }
@@ -873,7 +873,7 @@ namespace OnCallDutyPlanner
                             TableHeaderCell MYHeader = new TableHeaderCell();
                             MYHeader.Text = teamName;
                             MYHeader.ColumnSpan = dt.Columns.Count;
-                            MYHeader.BackColor = Color.Aquamarine;
+                            MYHeader.BackColor = Color.LightSkyBlue;
                             row.Controls.Add(MYHeader);
                             gv.HeaderRow.Parent.Controls.AddAt(0, row);
                         }

@@ -85,19 +85,20 @@
 
                     <asp:TemplateField ShowHeader="false">
                         <ItemTemplate>
-                            <asp:LinkButton ID="EditButton" Text="Edit" runat="server" CommandName="EditUser" CommandArgument="<%# Container.DataItemIndex %>" />
-                            <asp:LinkButton ID="DeleteButton" Text="Delete" runat="server" CommandName="DeleteUser" CommandArgument="<%# Container.DataItemIndex %>" />
+                            <asp:Button ID="EditButton" Text="Edit" runat="server" CommandName="EditUser" CommandArgument="<%# Container.DataItemIndex %>" />
+                            <asp:Button ID="DeleteButton" Text="Delete" runat="server" CommandName="DeleteUser" CommandArgument="<%# Container.DataItemIndex %>" />
                         </ItemTemplate>
                     </asp:TemplateField>
 
                     <asp:TemplateField ShowHeader="false" Visible="false">
                         <ItemTemplate>
                             <asp:Label runat="server" Text="Delete? "></asp:Label>
-                            <asp:LinkButton ID="YesDeleteButton" Text="Yes" runat="server" CommandName="YesDelete" CommandArgument="<%# Container.DataItemIndex %>" />
-                            <asp:LinkButton ID="NoDeleteButton" Text="No" runat="server" CommandName="NoDelete" />
+                            <asp:Button ID="YesDeleteButton" Text="Yes" runat="server" CommandName="YesDelete" CommandArgument="<%# Container.DataItemIndex %>" />
+                            <asp:Button ID="NoDeleteButton" Text="No" runat="server" CommandName="NoDelete" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>
+                <HeaderStyle BackColor="LightSkyBlue" />
             </asp:GridView>
             <hr/>
 
@@ -129,6 +130,11 @@
                     <asp:Button ID="CancelEditButton" runat="server" OnClick="CancelEditUser_Click" Text="Cancel" />
                 </div>
             </asp:Panel>
+        </div>
+
+        <div class="footer">
+            <span style="float:left; text-align:left;">How to use: <a href="#" target="_blank" style="color:gray;">Manual</a></span>
+            <span style="float:right; text-align:right;">Made by: <a href="https://github.com/mgolem00" target="_blank" style="color:gray;">Marin Golem</a></span>
         </div>
     </form>
 </body>
