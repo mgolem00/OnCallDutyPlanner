@@ -356,8 +356,11 @@ namespace OnCallDutyPlanner
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
-            ListTeams();
+            if(!IsPostBack)
+            {
+                Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
+                ListTeams();
+            }
         }
 
         protected void SignOut(object sender, EventArgs e)
@@ -372,6 +375,7 @@ namespace OnCallDutyPlanner
             OpenCreateTeamButton.Visible = false;
             CreateTeamPanel.Visible = true;
             ListUsers(UserListBox);
+            ListTeams();
         }
 
         protected void CancelCreateTeam_Click(object sender, EventArgs e)
@@ -379,6 +383,7 @@ namespace OnCallDutyPlanner
             TeamName.Text = null;
             OpenCreateTeamButton.Visible = true;
             CreateTeamPanel.Visible = false;
+            ListTeams();
         }
 
         protected void CreateTeam_Click(object sender, EventArgs e)
@@ -620,6 +625,7 @@ namespace OnCallDutyPlanner
             EditTeamPanel.Visible = false;
             HiddenEditTeamName.Value = null;
             HiddenEditRowIndex.Value = null;
+            ListTeams();
         }
     }
 }

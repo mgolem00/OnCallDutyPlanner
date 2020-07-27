@@ -390,10 +390,10 @@ namespace OnCallDutyPlanner
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                Label dateFinishedLabel = (Label)e.Row.Cells[6].Controls[1];
+                Label dateFinishedLabel = (Label)e.Row.Cells[4].Controls[1];
                 if (dateFinishedLabel.Text != "---")
                 {
-                    e.Row.Cells[6].Visible = false;
+                    e.Row.Cells[5].Visible = false;
                 }
             }
         }
@@ -428,6 +428,7 @@ namespace OnCallDutyPlanner
             HiddenEditProjectName.Value = null;
             HiddenEditAccountNumber.Value = null;
             HiddenEditRowIndex.Value = null;
+            ListProjects();
         }
 
         private int CreateProject(string projectName, string accountNumber)
@@ -461,6 +462,7 @@ namespace OnCallDutyPlanner
         {
             OpenCreateProjectButton.Visible = false;
             CreateProjectPanel.Visible = true;
+            ListProjects();
         }
 
         protected void CancelCreateProject_Click(object sender, EventArgs e)
@@ -469,6 +471,7 @@ namespace OnCallDutyPlanner
             AccountNumber.Text = null;
             OpenCreateProjectButton.Visible = true;
             CreateProjectPanel.Visible = false;
+            ListProjects();
         }
 
         protected void CreateProject_Click(object sender, EventArgs e)
@@ -534,8 +537,11 @@ namespace OnCallDutyPlanner
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
-            ListProjects();
+            if(!IsPostBack)
+            {
+                Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
+                ListProjects();
+            }
         }
 
         protected void SignOut(object sender, EventArgs e)

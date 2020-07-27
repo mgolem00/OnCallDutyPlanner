@@ -611,9 +611,17 @@ namespace OnCallDutyPlanner
                             dateType.Items.Add("w");
                             dateType.Items.Add("h");
                             dateType.SelectedValue = dateTypeDB;
-                            if(dateTypeDB == "w"|| dateTypeDB == "h")
+                            if (dateTypeDB == "w")
                             {
-                                dateType.BackColor = Color.LightGray;
+                                dateType.BackColor = Color.LightGreen;
+                            }
+                            else if (dateTypeDB == "h")
+                            {
+                                dateType.BackColor = Color.GreenYellow;
+                            }
+                            else
+                            {
+                                dateType.BackColor = Color.WhiteSmoke;
                             }
 
                             e.Row.Cells[i].Controls.Add(dateType);
@@ -643,6 +651,14 @@ namespace OnCallDutyPlanner
                             dateType.ID = "LabelDate-" + e.Row.RowIndex.ToString() + "-" + i.ToString() + "(" + date + ")";
                             dateType.ClientIDMode = ClientIDMode.Static;
                             dateType.Text = dateTypeDB;
+                            if (dateTypeDB == "w")
+                            {
+                                e.Row.Cells[i].BackColor = Color.LightGreen;
+                            }
+                            else if (dateTypeDB == "h")
+                            {
+                                e.Row.Cells[i].BackColor = Color.GreenYellow;
+                            }
 
                             e.Row.Cells[i].Controls.Add(dateType);
                         }
@@ -711,6 +727,10 @@ namespace OnCallDutyPlanner
                         {
                             dateType.BackColor = Color.GreenYellow;
                         }
+                        else
+                        {
+                            dateType.BackColor = Color.WhiteSmoke;
+                        }
 
                         e.Row.Cells[i].Controls.Add(dateType);
                     }
@@ -766,10 +786,12 @@ namespace OnCallDutyPlanner
                     }
                     e.Row.Cells[0].ColumnSpan = colCount / 2;
                     e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
+                    e.Row.Cells[0].Controls.Add(new LiteralControl("<br/>"));
                     e.Row.Cells[0].Controls.Add(autoInsertBtn);
 
                     e.Row.Cells[1].ColumnSpan = colCount / 2;
                     e.Row.Cells[1].HorizontalAlign = HorizontalAlign.Right;
+                    e.Row.Cells[1].Controls.Add(new LiteralControl("<br/>"));
                     e.Row.Cells[1].Controls.Add(createHistoryBtn);
                 }
                 else if((DateTime.Now.Month == 12 && ddlMonth == 1 && ddlYear == (DateTime.Now.Year + 1)) || (ddlMonth == (DateTime.Now.Month + 1) && ddlYear == DateTime.Now.Year))
@@ -781,6 +803,7 @@ namespace OnCallDutyPlanner
                     }
                     e.Row.Cells[0].ColumnSpan = colCount;
                     e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Left;
+                    e.Row.Cells[0].Controls.Add(new LiteralControl("<br/>"));
                     e.Row.Cells[0].Controls.Add(autoInsertBtn);
                 }
                 else if((ddlMonth < DateTime.Now.Month && ddlYear == DateTime.Now.Year) || ddlYear < DateTime.Now.Year)
@@ -792,6 +815,7 @@ namespace OnCallDutyPlanner
                     }
                     e.Row.Cells[0].ColumnSpan = colCount;
                     e.Row.Cells[0].HorizontalAlign = HorizontalAlign.Right;
+                    e.Row.Cells[0].Controls.Add(new LiteralControl("<br/>"));
                     e.Row.Cells[0].Controls.Add(createHistoryBtn);
                 }
             }

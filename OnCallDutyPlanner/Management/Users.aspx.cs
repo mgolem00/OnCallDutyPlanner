@@ -143,14 +143,18 @@ namespace OnCallDutyPlanner
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
-            ListUsers();
+            if(!IsPostBack)
+            {
+                Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
+                ListUsers();
+            }
         }
 
         protected void OpenCreateUser_Click(object sender, EventArgs e)
         {
             OpenCreateUserButton.Visible = false;
             CreateUserPanel.Visible = true;
+            ListUsers();
         }
 
         protected void CancelCreateUser_Click(object sender, EventArgs e)
@@ -159,6 +163,7 @@ namespace OnCallDutyPlanner
             Password.Text = null;
             OpenCreateUserButton.Visible = true;
             CreateUserPanel.Visible = false;
+            ListUsers();
         }
 
         protected void CreateUser_Click(object sender, EventArgs e)
@@ -447,6 +452,7 @@ namespace OnCallDutyPlanner
             HiddenEditUsername.Value = null;
             HiddenEditRole.Value = null;
             HiddenEditRowIndex.Value = null;
+            ListUsers();
         }
     }
 }
