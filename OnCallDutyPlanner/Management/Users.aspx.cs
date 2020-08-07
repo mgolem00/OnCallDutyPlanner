@@ -147,6 +147,12 @@ namespace OnCallDutyPlanner
             {
                 Welcome.Text = string.Format("Hello, {0}!", User.Identity.GetUserName());
                 ListUsers();
+                if (User.IsInRole("Admin"))
+                {
+                    OpenCreateUserButton.Visible = true;
+                }
+                else
+                    OpenCreateUserButton.Visible = false;
             }
         }
 
@@ -343,27 +349,6 @@ namespace OnCallDutyPlanner
                     ErrorEditLiteral.Text = string.Format("(1)Password change failed!");
                     updatesMade[1] = false;
                 }
-                
-                /*var result1 = manager.RemovePassword(user.Id);
-                if (result1.Succeeded)
-                {
-                    string newPwd = NewPasswordTextBox.Text;
-                    var result2 = manager.AddPassword(user.Id, newPwd);
-                    if (result2.Succeeded)
-                    {
-                        updatesMade[1] = true;
-                    }
-                    else
-                    {
-                        ErrorEditLiteral.Text = string.Format("(2)Password change failed!");
-                        updatesMade[1] = false;
-                    }
-                }
-                else
-                {
-                    ErrorEditLiteral.Text = string.Format("(1)Password change failed!");
-                    updatesMade[2] = false;
-                }*/
             }
             else updatesMade[1] = false;
 

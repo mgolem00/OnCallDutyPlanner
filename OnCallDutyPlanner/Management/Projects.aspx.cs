@@ -230,6 +230,38 @@ namespace OnCallDutyPlanner
             }
         }
 
+        private bool ProjectDetailsTakenCheck(string projectName, string accountNumber)
+        {
+            using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                bool isTaken = true;
+                var queryString = "SELECT ID FROM Accounts WHERE ProjectName = @projectName OR AccountNumber = @accountNumber;";
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@projectName", projectName);
+                command.Parameters.AddWithValue("@accountNumber", accountNumber);
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows == false)
+                    {
+                        isTaken = false;
+                    }
+                    reader.Close();
+                    connection.Close();
+                    return isTaken;
+
+                }
+                catch (Exception ex)
+                {
+                    connection.Close();
+                    Console.WriteLine(ex.Message);
+                    return true;
+                }
+            }
+        }
+
         private void EditProject()
         {
             bool isEmpty = false;
@@ -242,17 +274,7 @@ namespace OnCallDutyPlanner
             isEmpty = string.IsNullOrWhiteSpace(NewProjectNameTextBox.Text);
             if (isEmpty == false && projectName != HiddenEditProjectName.Value)
             {
-                for (int i = 0; i < ProjectsGridView.Rows.Count; i++)
-                {
-                    Label projectN = ProjectsGridView.Rows[i].FindControl("lbl_ProjectName") as Label;
-                    if (projectName == projectN.Text)
-                    {
-                        isTaken = true;
-                        break;
-                    }
-                    else
-                        isTaken = false;
-                }
+                isTaken = ProjectDetailsTakenCheck(projectName, "---");
 
                 if (isTaken == false)
                 {
@@ -268,17 +290,7 @@ namespace OnCallDutyPlanner
             isEmpty = string.IsNullOrWhiteSpace(NewAccountNumberTextBox.Text);
             if (isEmpty == false && accountNumber != HiddenEditAccountNumber.Value)
             {
-                for (int i = 0; i < ProjectsGridView.Rows.Count; i++)
-                {
-                    Label projectU = ProjectsGridView.Rows[i].FindControl("lbl_AccountNumber") as Label;
-                    if (accountNumber == projectU.Text)
-                    {
-                        isTaken = true;
-                        break;
-                    }
-                    else
-                        isTaken = false;
-                }
+                isTaken = ProjectDetailsTakenCheck("---", accountNumber);
 
                 if (isTaken == false)
                 {
@@ -478,34 +490,11 @@ namespace OnCallDutyPlanner
         {
             string projectName = ProjectName.Text;
             string accountNumber = AccountNumber.Text;
-            bool isNameTaken = false;
-            bool isAccountNumberTaken = false;
+            bool isTaken = false;
 
-            for (int i = 0; i < ProjectsGridView.Rows.Count; i++)
-            {
-                Label lbl_teamN = ProjectsGridView.Rows[i].FindControl("lbl_ProjectName") as Label;
-                Label lbl_accountNumber = ProjectsGridView.Rows[i].FindControl("lbl_AccountNumber") as Label;
-                if (projectName == lbl_teamN.Text && accountNumber == lbl_accountNumber.Text)
-                {
-                    isNameTaken = true;
-                    isAccountNumberTaken = true;
-                    break;
-                }
-                else if (projectName == lbl_teamN.Text && accountNumber != lbl_accountNumber.Text)
-                {
-                    isNameTaken = true;
-                    isAccountNumberTaken = false;
-                    break;
-                }
-                else if (projectName != lbl_teamN.Text && accountNumber == lbl_accountNumber.Text)
-                {
-                    isNameTaken = false;
-                    isAccountNumberTaken = true;
-                    break;
-                }
-            }
+            isTaken = ProjectDetailsTakenCheck(projectName, accountNumber);
 
-            if (isNameTaken == false && isAccountNumberTaken == false)
+            if (isTaken == false)
             {
                 int result = CreateProject(projectName, accountNumber);
 

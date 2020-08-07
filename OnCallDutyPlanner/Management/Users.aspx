@@ -45,7 +45,7 @@
 
                 <asp:DropDownList ID="RoleDropDown" runat="server">
                     <asp:ListItem Text="Worker" Value="Worker" />
-                    <asp:ListItem Text="Project Manager" Value="ProjectManager" />
+                    <asp:ListItem Text="Project Manager" Value="Project Manager" />
                     <asp:ListItem Text="Admin" Value="Admin" />
                 </asp:DropDownList>
 
@@ -120,7 +120,7 @@
 
                 <asp:DropDownList ID="EditRoleDropDown" runat="server">
                     <asp:ListItem Text="Worker" Value="Worker" />
-                    <asp:ListItem Text="Project Manager" Value="ProjectManager" />
+                    <asp:ListItem Text="Project Manager" Value="Project Manager" />
                     <asp:ListItem Text="Admin" Value="Admin" />
                 </asp:DropDownList>
 

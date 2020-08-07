@@ -370,6 +370,37 @@ namespace OnCallDutyPlanner
             Response.Redirect("~/Default.aspx");
         }
 
+        private bool TeamNameTakenCheck(string teamName)
+        {
+            using (SqlConnection connection = new SqlConnection(WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString))
+            {
+                bool isNameTaken = true;
+                var queryString = "SELECT TeamName FROM SLATeams WHERE TeamName = @teamName";
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@teamName", teamName);
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if(reader.HasRows == false)
+                    {
+                        isNameTaken = false;
+                    }
+                    reader.Close();
+                    connection.Close();
+                    return isNameTaken;
+
+                }
+                catch (Exception ex)
+                {
+                    connection.Close();
+                    Console.WriteLine(ex.Message);
+                    return true;
+                }
+            }
+        }
+
         protected void OpenCreateTeam_Click(object sender, EventArgs e)
         {
             OpenCreateTeamButton.Visible = false;
@@ -392,19 +423,8 @@ namespace OnCallDutyPlanner
             var manager = new UserManager<IdentityUser>(userStore);
             string teamName = TeamName.Text.ToString();
             bool isNameTaken = false;
-            
 
-            for (int i=0; i < TeamsGridView.Rows.Count; i++)
-            {
-                Label teamN = TeamsGridView.Rows[i].FindControl("lbl_TeamName") as Label;
-                if (teamName == teamN.Text)
-                {
-                    isNameTaken = true;
-                    break;
-                }
-                else 
-                    isNameTaken = false;
-            }
+            isNameTaken = TeamNameTakenCheck(teamName);
 
             if (isNameTaken == false)
             {
@@ -520,17 +540,7 @@ namespace OnCallDutyPlanner
             isEmpty = string.IsNullOrWhiteSpace(NewTeamNameTextBox.Text);
             if(isEmpty == false && teamName != HiddenEditTeamName.Value)
             {
-                for (int i = 0; i < TeamsGridView.Rows.Count; i++)
-                {
-                    Label teamN = TeamsGridView.Rows[i].FindControl("lbl_TeamName") as Label;
-                    if (teamName == teamN.Text)
-                    {
-                        isNameTaken = true;
-                        break;
-                    }
-                    else
-                        isNameTaken = false;
-                }
+                isNameTaken = TeamNameTakenCheck(teamName);
 
                 if (isNameTaken == false)
                 {
