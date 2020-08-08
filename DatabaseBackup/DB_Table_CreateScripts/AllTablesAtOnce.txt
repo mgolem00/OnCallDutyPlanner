@@ -1,0 +1,276 @@
+USE [***IME BAZE***]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[SLATeams](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[TeamName] [nvarchar](50) NOT NULL,
+	[IsDeleted] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[TeamName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[SLATeams] ADD  DEFAULT ((0)) FOR [IsDeleted]
+GO
+
+CREATE TABLE [dbo].[AspNetRoles](
+	[Id] [nvarchar](128) NOT NULL,
+	[Name] [nvarchar](256) NOT NULL,
+ CONSTRAINT [PK_dbo.AspNetRoles] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[AspNetUsers](
+	[Id] [nvarchar](128) NOT NULL,
+	[Email] [nvarchar](256) NULL,
+	[EmailConfirmed] [bit] NOT NULL,
+	[PasswordHash] [nvarchar](max) NULL,
+	[SecurityStamp] [nvarchar](max) NULL,
+	[PhoneNumber] [nvarchar](max) NULL,
+	[PhoneNumberConfirmed] [bit] NOT NULL,
+	[TwoFactorEnabled] [bit] NOT NULL,
+	[LockoutEndDateUtc] [datetime] NULL,
+	[LockoutEnabled] [bit] NOT NULL,
+	[AccessFailedCount] [int] NOT NULL,
+	[UserName] [nvarchar](256) NOT NULL,
+	[IsDeleted] [bit] NOT NULL,
+	[SLATeamID] [int] NULL,
+ CONSTRAINT [PK_dbo.AspNetUsers] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AspNetUsers] ADD  DEFAULT ((0)) FOR [IsDeleted]
+GO
+
+ALTER TABLE [dbo].[AspNetUsers]  WITH CHECK ADD  CONSTRAINT [FK_SLATeams_AspNetUsers] FOREIGN KEY([SLATeamID])
+REFERENCES [dbo].[SLATeams] ([ID])
+GO
+
+ALTER TABLE [dbo].[AspNetUsers] CHECK CONSTRAINT [FK_SLATeams_AspNetUsers]
+GO
+
+CREATE TABLE [dbo].[AspNetUserRoles](
+	[UserId] [nvarchar](128) NOT NULL,
+	[RoleId] [nvarchar](128) NOT NULL,
+ CONSTRAINT [PK_dbo.AspNetUserRoles] PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC,
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AspNetUserRoles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId] FOREIGN KEY([RoleId])
+REFERENCES [dbo].[AspNetRoles] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_dbo.AspNetUserRoles_dbo.AspNetRoles_RoleId]
+GO
+
+ALTER TABLE [dbo].[AspNetUserRoles]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId]
+GO
+
+CREATE TABLE [dbo].[AspNetUserLogins](
+	[LoginProvider] [nvarchar](128) NOT NULL,
+	[ProviderKey] [nvarchar](128) NOT NULL,
+	[UserId] [nvarchar](128) NOT NULL,
+ CONSTRAINT [PK_dbo.AspNetUserLogins] PRIMARY KEY CLUSTERED 
+(
+	[LoginProvider] ASC,
+	[ProviderKey] ASC,
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AspNetUserLogins]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[AspNetUserLogins] CHECK CONSTRAINT [FK_dbo.AspNetUserLogins_dbo.AspNetUsers_UserId]
+GO
+
+CREATE TABLE [dbo].[AspNetUserClaims](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [nvarchar](128) NOT NULL,
+	[ClaimType] [nvarchar](max) NULL,
+	[ClaimValue] [nvarchar](max) NULL,
+ CONSTRAINT [PK_dbo.AspNetUserClaims] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AspNetUserClaims]  WITH CHECK ADD  CONSTRAINT [FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[AspNetUserClaims] CHECK CONSTRAINT [FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId]
+GO
+
+CREATE TABLE [dbo].[Accounts](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[DateCreated] [date] NOT NULL,
+	[AccountNumber] [nvarchar](50) NOT NULL,
+	[ProjectName] [nvarchar](50) NOT NULL,
+	[DateFinished] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[ProjectName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[AccountNumber] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+CREATE TABLE [dbo].[AccountDistribution](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[SLATeamID] [int] NOT NULL,
+	[WorkPeriod] [date] NOT NULL,
+	[DateFinished] [date] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AccountDistribution]  WITH CHECK ADD  CONSTRAINT [FK_SLATeams_AccountDistribution] FOREIGN KEY([SLATeamID])
+REFERENCES [dbo].[SLATeams] ([ID])
+GO
+
+ALTER TABLE [dbo].[AccountDistribution] CHECK CONSTRAINT [FK_SLATeams_AccountDistribution]
+GO
+
+CREATE TABLE [dbo].[AccountDistributionAccounts](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[AccountID] [int] NOT NULL,
+	[AccountDistributionID] [int] NOT NULL,
+	[Percentage] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AccountDistributionAccounts]  WITH CHECK ADD  CONSTRAINT [FK_Accounts_AccountDistributionAccountDistributionAccounts] FOREIGN KEY([AccountDistributionID])
+REFERENCES [dbo].[AccountDistribution] ([ID])
+GO
+
+ALTER TABLE [dbo].[AccountDistributionAccounts] CHECK CONSTRAINT [FK_Accounts_AccountDistributionAccountDistributionAccounts]
+GO
+
+ALTER TABLE [dbo].[AccountDistributionAccounts]  WITH CHECK ADD  CONSTRAINT [FK_Accounts_AccountDistributionAccounts] FOREIGN KEY([AccountID])
+REFERENCES [dbo].[Accounts] ([ID])
+GO
+
+ALTER TABLE [dbo].[AccountDistributionAccounts] CHECK CONSTRAINT [FK_Accounts_AccountDistributionAccounts]
+GO
+
+ALTER TABLE [dbo].[AccountDistributionAccounts]  WITH CHECK ADD  CONSTRAINT [CHK_Percentage] CHECK  (([Percentage]>=(0) OR [Percentage]<=(100)))
+GO
+
+ALTER TABLE [dbo].[AccountDistributionAccounts] CHECK CONSTRAINT [CHK_Percentage]
+GO
+
+CREATE TABLE [dbo].[AccountDistributionHistory](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[AccountDistributionID] [int] NOT NULL,
+	[AccountID] [int] NOT NULL,
+	[UserID] [nvarchar](128) NOT NULL,
+	[TotalHours] [int] NOT NULL,
+	[TimePeriod] [date] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[AccountDistributionHistory]  WITH CHECK ADD  CONSTRAINT [FK_AccountDistribution_AccountDistributionHistory] FOREIGN KEY([AccountDistributionID])
+REFERENCES [dbo].[AccountDistribution] ([ID])
+GO
+
+ALTER TABLE [dbo].[AccountDistributionHistory] CHECK CONSTRAINT [FK_AccountDistribution_AccountDistributionHistory]
+GO
+
+ALTER TABLE [dbo].[AccountDistributionHistory]  WITH CHECK ADD  CONSTRAINT [FK_Accounts_AccountDistributionHistory] FOREIGN KEY([AccountID])
+REFERENCES [dbo].[Accounts] ([ID])
+GO
+
+ALTER TABLE [dbo].[AccountDistributionHistory] CHECK CONSTRAINT [FK_Accounts_AccountDistributionHistory]
+GO
+
+ALTER TABLE [dbo].[AccountDistributionHistory]  WITH CHECK ADD  CONSTRAINT [FK_AspNetUsers_AccountDistributionHistory] FOREIGN KEY([UserID])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+
+ALTER TABLE [dbo].[AccountDistributionHistory] CHECK CONSTRAINT [FK_AspNetUsers_AccountDistributionHistory]
+GO
+
+CREATE TABLE [dbo].[Dates](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[WorkDate] [date] NOT NULL,
+	[DateType] [nvarchar](1) NOT NULL,
+	[UserID] [nvarchar](128) NOT NULL,
+	[AccountDistributionID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Dates]  WITH CHECK ADD  CONSTRAINT [FK_AccountDistribution_Dates] FOREIGN KEY([AccountDistributionID])
+REFERENCES [dbo].[AccountDistribution] ([ID])
+GO
+
+ALTER TABLE [dbo].[Dates] CHECK CONSTRAINT [FK_AccountDistribution_Dates]
+GO
+
+ALTER TABLE [dbo].[Dates]  WITH CHECK ADD  CONSTRAINT [FK_AspNetUsers_Dates] FOREIGN KEY([UserID])
+REFERENCES [dbo].[AspNetUsers] ([Id])
+GO
+
+ALTER TABLE [dbo].[Dates] CHECK CONSTRAINT [FK_AspNetUsers_Dates]
+GO
+
+ALTER TABLE [dbo].[Dates]  WITH CHECK ADD  CONSTRAINT [CHK_DateType] CHECK  (([DateType]='w' OR [DateType]='h'))
+GO
+
+ALTER TABLE [dbo].[Dates] CHECK CONSTRAINT [CHK_DateType]
+GO
