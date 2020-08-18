@@ -7,7 +7,7 @@ The OCDPDB.bak file is a SQL Express Server test database with test-dummy data s
 
 Change the connection string in OnCallDutyPlanner/OnCallDutyPlanner/Web.config file to connect to your database
 
-If you are creating a completely new database you should put the following code in the default.aspx.cs Page_Load function:
+If you are creating a completely new database you should put the following code in the file  OnCallDutyPlanner/OnCallDutyPlanner/Default.aspx.cs - Page_Load function:
 ```
 var userStore = new UserStore<IdentityUser>();
 var manager = new UserManager<IdentityUser>(userStore);
