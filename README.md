@@ -16,6 +16,6 @@ manager.Create(user, "Password");
 manager.AddToRole(user.Id, "Admin");
 ```
 Ofcourse you should change the UserName and Password as you want. That shall create the first user, that is an admin.
-Start the application for the first time and after getting to the login page try to login as the user that was just created. If you can. just shut down the application, remove the code you just added and start the application again.
+Start the application for the first time and after getting to the login page try to login as the user that was just created. If you can log in just shut down the application, remove the code you just added and start the application again.
 
 Thats it! I hope it works!
