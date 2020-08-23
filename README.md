@@ -10,10 +10,17 @@ Change the connection string in OnCallDutyPlanner/OnCallDutyPlanner/Web.config f
 If you are creating a completely new database you should put the following code in the file  OnCallDutyPlanner/OnCallDutyPlanner/Default.aspx.cs - Page_Load function:
 ```
 var userStore = new UserStore<IdentityUser>();
-var manager = new UserManager<IdentityUser>(userStore);
+var roleStore = new RoleStore<IdentityRole>();
+var userManager = new UserManager<IdentityUser>(userStore);
+var roleManager = new RoleManager<IdentityRole>(roleStore);
+
+roleManager.Create(new IdentityRole("Admin"));
+roleManager.Create(new IdentityRole("Project Manager"));
+roleManager.Create(new IdentityRole("Worker"));
+
 var user = new IdentityUser() { UserName = "admin" };
-manager.Create(user, "Password");
-manager.AddToRole(user.Id, "Admin");
+userManager.Create(user, "Password");
+userManager.AddToRole(user.Id, "Admin");
 ```
 Ofcourse you should change the UserName and Password as you want. That shall create the first user, that is an admin.
 Start the application for the first time and after getting to the login page try to login as the user that was just created. If you can log in just shut down the application, remove the code you just added and start the application again.
